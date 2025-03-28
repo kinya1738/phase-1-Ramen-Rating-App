@@ -1,92 +1,57 @@
-const ramens = [
-    { id: 1, name: "Shoyu Ramen", restaurant: "Ichiran", image: "shoyu.jpg", rating: 5, comment: "Delicious!" },
-    { id: 2, name: "Miso Ramen", restaurant: "Menya", image: "miso.jpg", rating: 4, comment: "Very flavorful!" },
-    { id: 3, name: "Tonkotsu Ramen", restaurant: "Ramen-ya", image: "tonkotsu.jpg" }
- ];
 
- function displayRamens() {
-    const ramenMenu = document.getElementById('ramen-menu');
+document.addEventListener("DOMContentLoaded", main);
+
+function main() {
+    displayRamens();
+    addSubmitListener();
+}
+
+function displayRamens() {
+    const ramenMenu = document.querySelector("#ramen-container");
+
+    ramenMenu.innerHTML = "";
     
-    ramens.forEach(ramen => {
-        const imgElement = document.createElement('img');
-        imgElement.src = ramen.image;
-        imgElement.alt = ramen.name;
-        imgElement.title = `${ramen.name} from ${ramen.restaurant}`;
-        
-        
-       
-        ramenMenu.appendChild(imgElement);
+    document.querySelectorAll("#ramen-menu img").forEach(img => {
+        img.addEventListener("click", () => handleClick(img));
     });
 }
 
-
-console.log(displayRamens())
-
-
-function handleClick(event) {
-    const ramenDetail = document.getElementById('ramen-detail');
-    
-   
-    let ramenData;
-
-    if (event.target.id === 'shoyu') {
-        ramenData = { name: 'Shoyu Ramen', restaurant: 'Ichiran', rating: '5', comment: 'Delicious!' };
-    } else if (event.target.id === 'miso') {
-        ramenData = { name: 'Miso Ramen', restaurant: 'Menya', rating: '4', comment: 'Very flavorful!' };
-    } else if (event.target.id === 'tonkotsu') {
-        ramenData = { name: 'Tonkotsu Ramen', restaurant: 'Ramen-ya', rating: '5', comment: 'Rich and creamy!' };
-    }
-
-    ramenDetail.innerHTML = `
-    <h2>${name}</h2>
-    <p>Restaurant: ${restaurant}</p>
-    <p>Rating: ${rating}</p>
-    <p>Comment: ${comment}</p>
-`;
-
+function handleClick(img) {
+    document.getElementById("ramen-name").textContent = img.dataset.name || "Unknown";
+    document.getElementById("ramen-restaurant").textContent = img.dataset.restaurant || "Unknown";
+    document.getElementById("ramen-rating").textContent = `Rating: ${img.dataset.rating || "N/A"}`;
+    document.getElementById("ramen-comment").textContent = img.dataset.comment || "No comment available.";
+    document.getElementById("ramen-image").src = img.src;
+    document.getElementById("ramen-image").alt = img.dataset.name || "Unknown Ramen";
 }
 
-
-var ramenMenu = document.getElementById('ramen-menu');
-ramenMenu.addEventListener('click', function(event) {
-    if (event.target.tagName === 'IMG') { 
-        handleClick(event);
-    }
-});
-
-
-const addSubmitListener = () => {
-
-document.getElementById('ramen-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const name = document.getElementById('name').value;
-    const restaurant = document.getElementById('restaurant').value;
-    const rating = document.getElementById('rating').value;
-    const comment = document.getElementById('comment').value;
-    const image = document.getElementById('image').value;
-
-   
-    const img = document.createElement('img');
-    img.src = image;
-    img.alt = name;  
-    img.dataset.restaurant = restaurant;
-    img.dataset.rating = rating;
-    img.dataset.comment = comment;
-
-    
-    img.addEventListener('click', handleClick(newRamen));
-
-    
-    document.getElementById('ramen-menu').appendChild(img);
-
-    
-    event.target.reset();
-});
-};
-
+function addSubmitListener() {
+    document.getElementById("ramen-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        
+        const name = document.getElementById("name").value;
+        const restaurant = document.getElementById("restaurant").value;
+        const rating = document.getElementById("rating").value;
+        const comment = document.getElementById("comment").value;
+        const imageURL = document.getElementById("image").value;
+        
+        const newImg = document.createElement("img");
+        newImg.src = imageURL;
+        newImg.alt = name;
+        newImg.dataset.name = name;
+        newImg.dataset.restaurant = restaurant;
+        newImg.dataset.rating = rating;
+        newImg.dataset.comment = comment;
+        newImg.addEventListener("click", () => handleClick(newImg));
+        
+        document.getElementById("ramen-menu").appendChild(newImg);
+        document.getElementById("ramen-form").reset();
+    });
+}
 function main(){
   displayRamens();
   addSubmitListener();
 }
+
+
 
